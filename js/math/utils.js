@@ -56,3 +56,7 @@ function getIntersection(A, B, C ,D){
   }
   return null;
 }
+
+function lerp(a, b, t) {
+  return a + (b - a) * t;
+}
