@@ -10,19 +10,19 @@
     <h1>World Editor</h1>
     <canvas id="myCanvas"></canvas>
     <div id="controls">
-      <button onClick="addRandomPoint();">Add Point</button>
-      <button onClick="addRandomSegment();">Add Segment</button>
-      <button onClick="removeRandomSegment();">Remove Segment</button>
-      <button onClick="removeRandomPoint();">Remove Point</button>
-      <button onClick="removeAll();">Remove All</button>
+      <button onclick="dispose()">🗑️</button>
+      <button onclick="save()">💾</button>
     </div>
 
+    <script src="js/world.js"></script>
     <script src="js/graphEditor.js"></script>
     <script src="js/viewport.js"></script>
     <script src="js/math/utils.js"></script>
     <script src="js/math/graph.js"></script>
     <script src="js/primitives/point.js"></script>
     <script src="js/primitives/segment.js"></script>
+    <script src="js/primitives/polygon.js"></script>
+    <script src="js/primitives/envelope.js"></script>
     <script>
      
 
@@ -31,25 +31,33 @@
 
       const ctx = myCanvas.getContext("2d");
 
-      const p1 = new Point(100, 100);
-      const p2 = new Point(150, 300);
-      const p3 = new Point(400, 200);
-      const p4 = new Point(300, 100);
-
-      const s1 = new Segment(p1, p2);
-      const s2 = new Segment(p2, p3);
-      const s3 = new Segment(p3, p4);
-      const s4 = new Segment(p4, p1);
-
-      const graph = new Graph([p1, p2, p3, p4], [s1, s2, s3, s4]);
+     
+      const graphString = localStorage.getItem("graph");
+      const graphInfo = graphString ? JSON.parse(graphString) : null;
+      const graph = graphInfo
+      ? Graph.load(graphInfo)
+      : new Graph()
+      const world = new World(graph);
       const viewport = new Viewport(myCanvas);
       const graphEditor = new GraphEditor(viewport, graph);
 
       animate();
       function animate(){
         viewport.reset();
+        world.generate();
+        world.draw(ctx);
         graphEditor.display();
+        // new Polygon(graph.points).draw(ctx);
+        new Envelope(graph.segments[0], 80).draw(ctx);
         requestAnimationFrame(animate);
+      }
+
+      function dispose(){
+        graphEditor.dispose();
+      }
+
+      function save(){
+        localStorage.setItem("graph", JSON.stringify(graph));
       }
     </script>
   </body>
