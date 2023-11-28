@@ -6,7 +6,6 @@ class Envelope {
 
     }
     #generatePolygon(width, roundness){
-         if (!this.skeleton || !this.skeleton.p1 || !this.skeleton.p2) return new Polygon([]);
         const {p1,p2}=this.skeleton;
         const radius = width *0.5;
         const alpha= angle(subtract(p1,p2))
@@ -30,8 +29,7 @@ class Envelope {
         return new Polygon(points);
     }
 
-    draw(ctx){
-        this.poly.draw(ctx);
-        this.poly.drawSegments(ctx);
+    draw(ctx, options){
+        this.poly.draw(ctx, options);
     }
 }

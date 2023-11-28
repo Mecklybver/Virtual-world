@@ -46,9 +46,8 @@
         viewport.reset();
         world.generate();
         world.draw(ctx);
+        ctx.globalAlpha = 0.3;
         graphEditor.display();
-        // new Polygon(graph.points).draw(ctx);
-        new Envelope(graph.segments[0], 80).draw(ctx);
         requestAnimationFrame(animate);
       }
 
