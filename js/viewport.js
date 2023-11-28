@@ -4,6 +4,8 @@ class Viewport {
     this.ctx = canvas.getContext("2d");
 
     this.zoom = 1;
+    this.maxZoom = 20;
+    this.step = 0.8
     this.center = new Point(canvas.width*0.5,canvas.height*0.5)
     this.offset = scale(this.center, -1);
 
@@ -81,9 +83,9 @@ class Viewport {
 
   #handleMouseWheel(e) {
     const dir = Math.sign(e.deltaY);
-    const step = 0.1;
-    this.zoom += dir * step;
-    this.zoom = Math.max(1, Math.min(5, this.zoom));
+    // const step = 0.1;
+    this.zoom += dir * this.step;
+    this.zoom = Math.max(1, Math.min(this.maxZoom, this.zoom));
     
   }
 }
