@@ -1,5 +1,5 @@
 class Envelope {
-    constructor(skeleton, width, roundness = 10){
+    constructor(skeleton, width, roundness = 1){
         this.skeleton = skeleton;
         this.poly = this.#generatePolygon(width, roundness);
 
@@ -16,7 +16,7 @@ class Envelope {
         // const p2_cw = translate(p2, alpha_cw, radius)
         // const p1_cw = translate(p1, alpha_cw, radius);
         const points =[];
-        let step = Math.PI / roundness;
+        let step = Math.PI / Math.max(1,roundness);
         const eps = step/2
         
          for (let i = alpha_ccw; i <= alpha_cw + eps; i += step){
