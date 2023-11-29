@@ -4,7 +4,7 @@ class World {
     roadWidth = 100,
     roadRoundness = 23,
     buildingWidth = 150,
-    buildingMinLength = 50,
+    buildingMinLength = 150,
     spacing = 50,
     treeSize = 160
   ) {
@@ -39,7 +39,7 @@ class World {
   #generateTrees() {
     const points = [
       ...this.roadBorders.map((s) => [s.p1, s.p2]).flat(),
-      ...this.buildings.map((b) => b.points).flat(),
+      ...this.buildings.map((b) => b.base.points).flat(),
     ];
     const left = Math.min(...points.map((p) => p.x));
     const right = Math.max(...points.map((p) => p.x));
@@ -47,7 +47,7 @@ class World {
     const bottom = Math.max(...points.map((p) => p.y));
 
     const illegalPolys = [
-      ...this.buildings,
+      ...this.buildings.map((b)=> b.base),
       ...this.envelopes.map((e) => e.poly),
     ];
 
@@ -73,7 +73,7 @@ class World {
 
       if (keep){
         for (const tree of trees){
-          if (distance(tree, p)< this.treeSize){
+          if (distance(tree.center, p)< this.treeSize){
             keep = false;
             break
           }
@@ -92,7 +92,7 @@ class World {
         keep = closeToSomething;
       }
       if (keep) {
-        trees.push(p);
+        trees.push(new Tree(p, this.treeSize));
         tryCount = 0;
       }
       tryCount++
@@ -159,10 +159,10 @@ class World {
       }
     }
 
-    return bases;
+    return bases.map((b)=> new Building(b));
   }
 
-  draw(ctx) {
+  draw(ctx, viewPoint) {
     for (const env of this.envelopes) {
       env.draw(ctx, { fill: "#BBB", stroke: "#BBB", lineWidth: 15 });
     }
@@ -175,12 +175,24 @@ class World {
       seg.draw(ctx, { color: "white", size: 14 });
     }
 
-    for (const bld of this.buildings) {
-      bld.draw(ctx);
-    }
+    const items = [...this.buildings, ... this.trees];
 
-    for (const tree of this.trees) {
-      tree.draw(ctx, {size: this.treeSize, color: "rgba(0,0,0,0.5)"});
+    // for (const bld of this.buildings) {
+    //   bld.draw(ctx,viewPoint);  
+    // }
+
+    // for (const tree of this.trees) {
+    //   tree.draw(ctx, viewPoint);
+    // }
+
+    items.sort(
+      (a,b) =>
+      b.base.distanceToPoint(viewPoint)-
+      a.base.distanceToPoint(viewPoint)
+  );
+
+    for (const item of items){
+      item.draw(ctx,viewPoint);
     }
   }
 }

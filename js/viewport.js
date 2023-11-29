@@ -5,7 +5,7 @@ class Viewport {
 
     this.zoom = 1;
     this.maxZoom = 20;
-    this.step = 0.8
+    this.step = 0.1
     this.center = new Point(canvas.width*0.5,canvas.height*0.5)
     this.offset = scale(this.center, -1);
 
