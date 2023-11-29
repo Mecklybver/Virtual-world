@@ -30,8 +30,8 @@
     <script src="js/primitives/polygon.js"></script>
     <script src="js/primitives/envelope.js"></script>
     <script>
-      // myCanvas.width =innerWidth - 100;
-      // myCanvas.height = innerHeight - 140;
+      myCanvas.width =innerWidth - 100;
+      myCanvas.height = innerHeight - 140;
 
       const ctx = myCanvas.getContext("2d");
 
@@ -49,8 +49,7 @@
 
       animate();
       function animate() {
-        myCanvas.width =innerWidth - 100;
-      myCanvas.height = innerHeight - 140;
+      
         viewport.reset();
         if (graph.hash() != oldGraphHash) {
           world.generate();
